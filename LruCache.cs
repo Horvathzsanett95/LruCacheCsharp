@@ -32,9 +32,8 @@ namespace CacheOperations
 
         public TValue Get(TKey key)
         {
-            TValue value = default(TValue);
-            try
-            {
+            TValue value;
+
                 LinkedListNode<KeyValuePair<TKey, TValue>> node;
                 if (_cacheMap.TryGetValue(key, out node))
                 {
@@ -42,10 +41,9 @@ namespace CacheOperations
                     _cacheList.Remove(node);
                     _cacheList.AddLast(node);
                 }
-            }
-            catch (AccessViolationException exception)
+            else
             {
-                Console.WriteLine("\nMessage ---\n{0}", exception.Message);
+                throw new ArgumentNullException("The key does not exist!");
             }
             return value;
         }
